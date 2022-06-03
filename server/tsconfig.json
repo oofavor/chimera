@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "es2022",
-    "moduleResolution": "node",
+    "target": "es6",
+    "module": "commonjs",
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "isolatedModules": true,
+    "lib": ["esnext"],
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*", "types/*"],
+      "@type/*": ["src/types/*"],
       "@controllers/*": ["src/controllers/*"],
       "@middlewares/*": ["src/middlewares/*"],
       "@routes/*": ["src/routes/*"],
@@ -18,5 +22,6 @@
       "@utils/*": ["src/utils/*"]
     }
   },
-  "include": ["src/*", "app.ts"]
+  "include": ["/**/*.ts"],
+  "exclude": ["node_modules"]
 }
