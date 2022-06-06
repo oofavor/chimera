@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cd server && yarn dev",
-    "start": "yarn deps && yarn dev",
+    "start": "yarn deps && cd server && yarn dev",
     "deps": "yarn && cd server && yarn",
     "build": "next build",
     "lint": "next lint",
