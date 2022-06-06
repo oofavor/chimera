@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cd server && yarn && yarn dev",
+    "dev": "cd server && yarn dev",
+    "start": "yarn install && yarn dev",
+    "install": "yarn && cd server && yarn",
     "build": "next build",
     "lint": "next lint",
     "serverless": "next dev"
