@@ -29,7 +29,6 @@ nextApp.prepare().then(() => {
   app.use('/api/users', userRouter);
   app.use('/api/relations', relationRouter);
   app.use('/api/messages', messageRouter);
-  app.all('*', (req: IncomingMessage, res: ServerResponse) => handle(req, res)); // set next.js routes after set all server routes
 
   const server = app.listen(port, () => {
     console.log(
@@ -40,9 +39,8 @@ nextApp.prepare().then(() => {
     );
   });
 
-  const peerServer = ExpressPeerServer(server, {
-    path: '/myapp',
-  });
+  const peerServer = ExpressPeerServer(server, {});
 
   app.use('/peerjs', peerServer);
+  app.all('*', (req: IncomingMessage, res: ServerResponse) => handle(req, res)); // set next.js routes after set all server routes
 });
