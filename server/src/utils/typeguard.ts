@@ -1,15 +1,13 @@
-import Message from '@models/message.model';
-import Relation from '@models/relation.model';
-import User from '@models/user.model';
+import { Message, Relation, User } from '@type/models';
 
 export const isUser = (user: any): user is User => {
-  return 'name' in user && 'email' in user && 'password' in user;
+  return 'name' in user && 'password' in user;
 };
 
 export const isRelation = (relation: any): relation is Relation => {
-  return 'peerIDs' in relation && 'isPrivate' in relation;
+  return 'peerIDs' in relation;
 };
 
 export const isMessage = (message: any): message is Message => {
-  return 'text' in message && 'relationID' in message && 'userId' in message;
+  return 'text' in message && 'relationID' in message;
 };

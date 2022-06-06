@@ -8,19 +8,17 @@ import {
   getMessages,
 } from '@services/relation.service';
 import { isRelation } from '@utils/typeguard';
-
-// TODO:
-//    Handle errors better
-//    Add more type guards for input
+import { createError } from '@utils/createError';
+import { checkToken, sanitizeUser } from '@utils/authentication';
+import { getUser } from '@services/user.service';
 
 export const getRelationRequest: Controller = async (req, res) => {
   const relationId = req.params.id;
   if (!relationId)
-    return res
-      .status(400)
-      .json({ isError: true, error: 'Missing relation id' });
+    return res.status(400).json(createError('Missing relation id'));
+
   const relation = await getRelationByID(relationId);
-  if ('isError' in relation) return res.status(404);
+  if ('isError' in relation) return res.status(404).json(relation);
   return res.json(relation);
 };
 
@@ -28,54 +26,77 @@ export const getRelationRequest: Controller = async (req, res) => {
 export const createRelationRequest: Controller = async (req, res) => {
   const relation = req.body;
   if (!isRelation(relation))
-    return res.status(400).json({ isError: true, error: 'Invalid relation' });
+    return res.status(400).json(createError('Invalid relation'));
   const createdRelation = await createRelation(relation);
   if ('isError' in createdRelation) return res.status(400);
+
   return res.json(createdRelation);
-};
-
-// TODO: check if user has rights to change relation
-export const changeRelationRequest: Controller = async (req, res) => {
-  const peerIDs = req.body;
-  const relationID = req.params.id;
-
-  if (!Array.isArray(peerIDs))
-    return res.status(400).json({ isError: true, error: 'Invalid relation' });
-  const changedRelation = await changeRelation(relationID, {
-    peerIDs,
-    isPrivate: false,
-  });
-  if ('isError' in changedRelation) return res.status(400);
-  return res.json(changedRelation);
 };
 
 export const addPeerRequest: Controller = async (req, res) => {
   const relationID = req.params.id;
   const peerID = req.body.peerID;
-
   if (!relationID || !peerID)
-    return res.status(400).json({ isError: true, error: 'Invalid relation' });
+    return res.status(400).json(createError('Invalid relation'));
+
+  const token = req.headers.authorization;
+  const user = checkToken(token);
+  if (typeof user === 'string') return res.status(401).json(createError(user));
+
+  const foundUser = await getUser(sanitizeUser(user));
+  if ('isError' in foundUser) return res.status(403).json(foundUser);
+
+  if (!foundUser.relationIDs.includes(relationID))
+    return res
+      .status(403)
+      .json(createError('You are not allowed to change this relation'));
+
   const changedRelation = await addPeer(relationID, peerID);
   if ('isError' in changedRelation) return res.status(400);
+
   return res.json(changedRelation);
 };
 
-export const deletePeerRequest: Controller = async (req, res) => {
+export const removePeerRequest: Controller = async (req, res) => {
   const relationID = req.params.id;
   const peerID = req.body.peerID;
-
   if (!relationID || !peerID)
-    return res.status(400).json({ isError: true, error: 'Invalid relation' });
+    return res.status(400).json(createError('Invalid relation'));
+
+  const token = req.headers.authorization;
+  const user = checkToken(token);
+  if (typeof user === 'string') return res.status(401).json(createError(user));
+
+  const foundUser = await getUser(sanitizeUser(user));
+  if ('isError' in foundUser) return res.status(403).json(foundUser);
+
+  if (!foundUser.relationIDs.includes(relationID))
+    return res
+      .status(403)
+      .json(createError('You are not allowed to change this relation'));
+
   const changedRelation = await deletePeer(relationID, peerID);
   if ('isError' in changedRelation) return res.status(400);
+
   return res.json(changedRelation);
 };
 
 export const getMessagesRequest: Controller = async (req, res) => {
   const relationID = req.params.id;
+  if (!relationID) return res.status(400).json(createError('Invalid relation'));
 
-  if (!relationID)
-    return res.status(400).json({ isError: true, error: 'Invalid relation' });
+  const token = req.headers.authorization;
+  const user = checkToken(token);
+  if (typeof user === 'string') return res.status(401).json(createError(user));
+
+  const foundUser = await getUser(sanitizeUser(user));
+  if ('isError' in foundUser) return res.status(403).json(foundUser);
+
+  if (!foundUser.relationIDs.includes(relationID))
+    return res
+      .status(403)
+      .json(createError('You are not allowed to view this relation'));
+      
   const messages = await getMessages(relationID);
   if ('isError' in messages) return res.status(400);
   return res.json(messages);

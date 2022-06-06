@@ -20,8 +20,8 @@
       "@models/*": ["src/models/*"],
       "@services/*": ["src/services/*"],
       "@utils/*": ["src/utils/*"]
-    }
+    },
   },
   "include": ["/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

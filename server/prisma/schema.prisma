@@ -13,7 +13,6 @@ generator client {
 model User {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String     @unique
-  email       String     @unique
   password    String
   isOnline    Boolean    @default(true)
   relationIDs String[]   @db.ObjectId
@@ -24,7 +23,6 @@ model User {
 model Relation {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   messages  Message[]
-  isPrivate Boolean   @default(true)
   peerIDs   String[]  @db.ObjectId
   peers     User[]    @relation(fields: [peerIDs], references: [id])
 }
@@ -33,8 +31,8 @@ model Message {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   relation   Relation @relation(fields: [relationID], references: [id])
   relationID String   @db.ObjectId
-  userId     String   @db.ObjectId
-  createdBy  User     @relation(fields: [userId], references: [id])
-  text       String
+  userID     String   @db.ObjectId
+  createdBy  User     @relation(fields: [userID], references: [id])
   createdAt  DateTime @default(now())
+  text       String
 }

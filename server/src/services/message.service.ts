@@ -1,23 +1,18 @@
 import { createError } from '@utils/createError';
 import prisma from '../../prisma/client';
-import Message from '@models/message.model';
+import { serviceHandler } from '@utils/service';
+import { Message } from '@type/models';
 
-export const getMessageByID = async (id: string) => {
-  try {
+export const getMessageByID = (id: string) =>
+  serviceHandler(async () => {
     const message = await prisma.message.findFirst({ where: { id } });
     return message || createError('Message not found');
-  } catch (e) {
-    return createError(e);
-  }
-};
+  });
 
-export const createMessage = async (message: Message) => {
-  try {
+export const createMessage = async (message: Message) =>
+  serviceHandler(async () => {
     const createdMessage = await prisma.message.create({
       data: message,
     });
     return createdMessage;
-  } catch (e) {
-    return createError(e);
-  }
-};
+  });
