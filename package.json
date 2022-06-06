@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "cd server && yarn dev",
-    "start": "yarn install && yarn dev",
-    "install": "yarn && cd server && yarn",
+    "start": "yarn deps && yarn dev",
+    "deps": "yarn && cd server && yarn",
     "build": "next build",
     "lint": "next lint",
     "serverless": "next dev"
