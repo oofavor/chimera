@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cd server && yarn dev",
+    "dev": "cd server && yarn && yarn dev",
     "build": "next build",
-    "start": "next start",
     "lint": "next lint",
     "serverless": "next dev"
   },

@@ -21,9 +21,11 @@ const Testi = () => {
         video: true,
         audio: true,
       });
+
       if (!currentUserVideoRef.current || !currentUserVideoRef.current) return;
       currentUserVideoRef.current.srcObject = stream;
       currentUserVideoRef.current.play();
+      
       call.answer(stream);
       call.on('stream', (remoteStream) => {
         if (!remoteVideoRef.current) return;
