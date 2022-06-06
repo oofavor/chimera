@@ -7,6 +7,7 @@
   "rootDir": ".",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register app.ts",
+    "start": "ts-node -r tsconfig-paths/register app.ts",
     "test": "jest"
   },
   "dependencies": {
