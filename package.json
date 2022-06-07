@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cd server && yarn dev",
-    "start": "yarn && cd server && yarn && yarn start",
+    "dev": "cd server & yarn dev",
+    "start1": "yarn install && cd server && yarn install && yarn start",
     "deps": "",
     "build": "next build",
     "lint": "next lint",
