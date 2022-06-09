@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cd server & yarn dev",
-    "start": "yarn install && cd server && yarn install && yarn start",
+    "dev": "cd server && yarn dev",
+    "start": "yarn && cd server && yarn && yarn start",
     "deps": "",
     "build": "next build",
     "lint": "next lint",
@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@nextui-org/react": "^1.0.0-beta.7",
-    "next": "12.1.6",
+    "axios": "^0.27.2",
+    "next": "12.1.7-canary.33",
     "peerjs": "^1.4.6",
-    "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-query": "^3.39.1"
   },
   "devDependencies": {
     "@types/node": "17.0.33",

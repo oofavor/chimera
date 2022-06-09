@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+
 const Testi = dynamic(() => import('../components/test'), {
   ssr: false,
 });

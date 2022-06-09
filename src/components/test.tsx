@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 const Testi = () => {
   const [peerId, setPeerId] = useState('');
   const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const currentUserVideoRef = useRef<HTMLVideoElement>(null);
+  const remoteVideoRef = useRef<(HTMLVideoElement | null)[]>([]);
   const peerInstance = useRef<Peer | null>(null);
 
   useEffect(() => {
@@ -22,15 +22,16 @@ const Testi = () => {
         audio: true,
       });
 
-      if (!currentUserVideoRef.current || !currentUserVideoRef.current) return;
+      if (!currentUserVideoRef.current) return;
       currentUserVideoRef.current.srcObject = stream;
       currentUserVideoRef.current.play();
-      
+
       call.answer(stream);
       call.on('stream', (remoteStream) => {
-        if (!remoteVideoRef.current) return;
-        remoteVideoRef.current.srcObject = remoteStream;
-        remoteVideoRef.current.play();
+        if (!remoteVideoRef.current[0]) return;
+        
+        remoteVideoRef.current[0].srcObject = remoteStream;
+        remoteVideoRef.current[0].play();
       });
     });
   }, []);
@@ -40,16 +41,19 @@ const Testi = () => {
       video: true,
       audio: true,
     });
-    if (!currentUserVideoRef.current || !currentUserVideoRef.current) return;
+    if (!currentUserVideoRef.current) return;
     currentUserVideoRef.current.srcObject = stream;
     currentUserVideoRef.current.play();
 
-    const call = peerInstance.current?.call(remotePeerId, stream);
+    if (!peerInstance.current) return;
 
-    call?.on('stream', (remoteStream) => {
-      if (!remoteVideoRef.current) return;
-      remoteVideoRef.current.srcObject = remoteStream;
-      remoteVideoRef.current.play();
+    const call = peerInstance.current.call(remotePeerId, stream);
+
+    call.on('stream', (remoteStream) => {
+      if (!remoteVideoRef.current[0]) return;
+
+      remoteVideoRef.current[0].srcObject = remoteStream;
+      remoteVideoRef.current[0].play();
     });
   };
 
@@ -66,7 +70,7 @@ const Testi = () => {
         <video ref={currentUserVideoRef} />
       </div>
       <div>
-        <video ref={remoteVideoRef} />
+        <video ref={(el) => (remoteVideoRef.current[0] = el)} />
       </div>
     </div>
   );

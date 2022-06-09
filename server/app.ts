@@ -9,6 +9,7 @@ import { config } from 'dotenv';
 import { IncomingMessage, ServerResponse } from 'http';
 import { ExpressPeerServer } from 'peer';
 config();
+import { CssBaseline } from '@nextui-org/react';
 
 const app = express();
 const dev = process.env.NODE_ENV !== 'production';
@@ -19,7 +20,6 @@ const handle = nextApp.getRequestHandler();
 
 nextApp.prepare().then(() => {
   const port = process.env.PORT || 3000;
-
   // setting middleware
   app.use(express.json());
   app.use(logger('dev'));
@@ -43,4 +43,5 @@ nextApp.prepare().then(() => {
 
   app.use('/peerjs', peerServer);
   app.all('*', (req: IncomingMessage, res: ServerResponse) => handle(req, res)); // set next.js routes after set all server routes
+  CssBaseline.flush();
 });
