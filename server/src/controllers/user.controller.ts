@@ -33,7 +33,7 @@ export const loginUser: Controller = async (req, res) => {
   if ('isError' in user) return res.json(user);
 
   const foundUser = await getUser(user);
-  if ('isError' in foundUser) return res.json(404).json(foundUser);
+  if ('isError' in foundUser) return res.status(404).json('User not found');
 
   const passwordsSame = user.password === foundUser.password;
   if (!passwordsSame) return res.status(400).send('Invalid password');

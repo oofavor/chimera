@@ -2,21 +2,29 @@ import type { AppProps } from 'next/app';
 import { NextUIProvider } from '@nextui-org/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { UserProvider } from '../contexts/user';
-import { RedirectMagician } from '../components/RedirectMagician';
+import { globalCss } from '@nextui-org/react';
+import { Layout } from '../components/Layout';
 
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  globalCss({
+    body: { height: '100%' },
+    html: { height: '100%' },
+    '#__next': { height: '100%' },
+    '#__next > *': { height: '100%' },
+  })();
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <UserProvider>
+    <UserProvider>
+      <QueryClientProvider client={queryClient}>
         <NextUIProvider>
-          <RedirectMagician>
+          <Layout>
             <Component {...pageProps} />
-          </RedirectMagician>
+          </Layout>
         </NextUIProvider>
-      </UserProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </UserProvider>
   );
 }
 

@@ -7,9 +7,11 @@ const Testi = dynamic(() => import('../components/test'), {
 
 const Test = () => {
   const [SSR, setSSR] = useState(false);
+
   useEffect(() => {
     setSSR(true);
   }, []);
+
   return (
     <div>
       <h1>{SSR ? 'Loaded' : 'Loading...'}</h1>

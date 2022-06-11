@@ -1,39 +1,54 @@
-import { Button, Input } from '@nextui-org/react';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { Button, Container, Input, styled } from '@nextui-org/react';
+import { NextPage } from 'next';
 import { useLogin } from '../hooks/useLogin';
-import { useUser } from '../hooks/useUser';
 
-const Login = () => {
-  const { set, login, name, password } = useLogin();
-  const { user } = useUser();
-  const router = useRouter();
+const Login: NextPage = () => {
+  const { set, login, name, password, nameError, passwordError } = useLogin();
 
-  useEffect(() => {
-    if (user) router.push('/home');
-  }, [user]);
-  
   return (
-    <div>
-      <form onSubmit={login}>
+    <Container
+      alignItems="center"
+      justify="center"
+      display="flex"
+      direction="column"
+      css={{ height: '100%' }}
+    >
+      <Form onSubmit={login}>
         <Input
-          label="Name"
-          placeholder="name"
+          color="primary"
+          labelPlaceholder="name"
           value={name}
           onChange={set('name')}
+          bordered
+          required
+          fullWidth
+          helperText={nameError}
+          helperColor="error"
         />
-        <Input
-          label="password"
-          placeholder="password"
+        <Input.Password
+          color="primary"
+          labelPlaceholder="password"
           value={password}
           onChange={set('password')}
+          bordered
+          required
+          fullWidth
+          helperText={passwordError}
+          helperColor="error"
         />
         <Button type="submit" ripple>
           Login
         </Button>
-      </form>
-    </div>
+      </Form>
+    </Container>
   );
 };
+
+const Form = styled('form', {
+  flexDirection: 'column',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '48px',
+});
 
 export default Login;
