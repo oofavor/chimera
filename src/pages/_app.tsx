@@ -16,15 +16,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   })();
 
   return (
-    <UserProvider>
+    <NextUIProvider>
       <QueryClientProvider client={queryClient}>
-        <NextUIProvider>
+        <UserProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </NextUIProvider>
+        </UserProvider>
       </QueryClientProvider>
-    </UserProvider>
+    </NextUIProvider>
   );
 }
 
