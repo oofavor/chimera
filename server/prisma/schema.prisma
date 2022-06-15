@@ -18,13 +18,17 @@ model User {
   relationIDs String[]   @db.ObjectId
   relations   Relation[] @relation(fields: [relationIDs], references: [id])
   messages    Message[]
+  imageURL    String     @default("")
 }
 
 model Relation {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  messages  Message[]
-  peerIDs   String[]  @db.ObjectId
-  peers     User[]    @relation(fields: [peerIDs], references: [id])
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  messages    Message[]
+  peerIDs     String[]  @db.ObjectId
+  peers       User[]    @relation(fields: [peerIDs], references: [id])
+  name        String
+  description String    @default("")
+  imageURL    String    @default("")
 }
 
 model Message {

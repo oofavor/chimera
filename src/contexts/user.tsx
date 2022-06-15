@@ -1,10 +1,10 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { User } from '../types/models';
 import axios, { AxiosError } from 'axios';
-import { Error } from '../types/requests';
+import type { ServerError } from '../types/requests';
 import { Container, Loading } from '@nextui-org/react';
-import { useRouter } from 'next/router';
 import { parseCookie } from '../utils';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type UserContext = {
   user: User | null;
@@ -19,7 +19,8 @@ export const UserContext = createContext<UserContext>({
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isRequesting, setIsRequesting] = useState(true);
-  const router = useRouter();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = parseCookie(document.cookie).token;
@@ -28,10 +29,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     axios.defaults.headers.common['Authorization'] = token;
     axios
       .post<User>('/api/users/current')
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch((e: AxiosError | Error) => {
+      .then((res) => setUser(res.data))
+      .catch((e: AxiosError | ServerError) => {
         if (!axios.isAxiosError(e)) return;
         axios.defaults.headers.common['Authorization'] = '';
       })
@@ -39,10 +38,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (user && router.pathname === '/login') router.push('/');
-    if (!user && router.pathname !== '/login' && !isRequesting)
-      router.push('/login');
-  }, [user, router, isRequesting]);
+    if (!user && location.pathname !== '/login' && !isRequesting)
+      navigate('/login');
+    if (user && location.pathname === '/login' && !isRequesting) navigate('/');
+  }, [user, isRequesting]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

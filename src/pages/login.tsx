@@ -1,8 +1,7 @@
 import { Button, Container, Input, styled } from '@nextui-org/react';
-import { NextPage } from 'next';
 import { useLogin } from '../hooks/useLogin';
 
-const Login: NextPage = () => {
+const Login = () => {
   const { set, login, name, password, nameError, passwordError } = useLogin();
 
   return (

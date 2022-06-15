@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { FormElement } from '@nextui-org/react';
-import { Error, UserResponse } from '../types/requests';
+import { ServerError, UserResponse } from '../types/requests';
 import { useUser } from './useUser';
 import { encodeCookie, parseCookie } from '../utils';
 
@@ -30,7 +30,7 @@ export const useLogin = () => {
         name,
         password,
       })
-      .catch((e: AxiosError | Error) => {
+      .catch((e: AxiosError | ServerError) => {
         if (!axios.isAxiosError(e)) return;
         setNameError('User not found');
       });

@@ -1,11 +1,11 @@
 import { User } from './models';
 
-export type Error = {
+export interface ServerError {
   isError: true;
   error: any;
-};
+}
 
-export type UserResponse = {
+export interface UserResponse {
   user: User;
   token: string;
-};
+}

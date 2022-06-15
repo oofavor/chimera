@@ -1,7 +1,7 @@
-import { validateCreateUserBody } from '../utils/validate';
+import { validateCreateUserBody } from '@utils/validate';
 
 describe('User', () => {
-  test('should validate when register', () => {
+  test('should validate correctly', () => {
     const name = 'testify';
     const password = 'AbC1235AqwV';
 
