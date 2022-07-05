@@ -4,7 +4,10 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import Login from './pages/login';
 import { CreateRelation } from './components/CreateRelation';
 import Testi from './components/test';
-import { Layout } from './components/Layout';
+import { Layout } from './components/Layout/';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const client = new QueryClient();
 
 const App = () => {
   globalCss({
@@ -19,19 +22,21 @@ const App = () => {
     </Layout>
   );
   return (
-    <BrowserRouter>
-      <NextUIProvider>
-        <UserProvider>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route element={MainLayout}>
-              <Route path="create" element={<CreateRelation />} />
-              <Route path="test" element={<Testi />} />
-            </Route>
-          </Routes>
-        </UserProvider>
-      </NextUIProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={client}>
+      <BrowserRouter>
+        <NextUIProvider>
+          <UserProvider>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route element={MainLayout}>
+                <Route path="create" element={<CreateRelation />} />
+                <Route path="test" element={<Testi />} />
+              </Route>
+            </Routes>
+          </UserProvider>
+        </NextUIProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 

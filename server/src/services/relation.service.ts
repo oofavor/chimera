@@ -54,3 +54,11 @@ export const getMessages = (id: string) =>
       .messages();
     return messages;
   });
+
+export const getRelationsByUserID = (userID: string) =>
+  serviceHandler(async () => {
+    const relations = await prisma.relation.findMany({
+      where: { peerIDs: { hasSome: userID } },
+    });
+    return relations;
+  });

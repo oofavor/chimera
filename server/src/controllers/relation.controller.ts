@@ -6,11 +6,13 @@ import {
   addPeer,
   deletePeer,
   getMessages,
+  getRelationsByUserID,
 } from '@services/relation.service';
 import { isRelation } from '@utils/typeguard';
 import { createError } from '@utils/createError';
 import { checkToken, sanitizeUser } from '@utils/authentication';
 import { getUser } from '@services/user.service';
+import { currentUser } from './user.controller';
 
 export const getRelationRequest: Controller = async (req, res) => {
   const relationId = req.params.id;
@@ -101,3 +103,16 @@ export const getMessagesRequest: Controller = async (req, res) => {
   if ('isError' in messages) return res.status(400);
   return res.json(messages);
 };
+
+export const getRelationsByUserRequest: Controller = async (req, res) => {
+  const token = req.headers.authorization;
+  const user = checkToken(token);
+  if (typeof user === 'string') return res.status(401).json(createError(user));
+
+  const foundUser = await getUser(sanitizeUser(user));
+  if ('isError' in foundUser) return res.status(403).json(foundUser);
+
+  const relations = await getRelationsByUserID(foundUser.id);
+  if ('isError' in relations) return res.status(401);
+  return res.json(relations);
+}

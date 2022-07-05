@@ -6,10 +6,10 @@ import { Container, Loading } from '@nextui-org/react';
 import { parseCookie } from '../utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-type UserContext = {
+interface UserContext {
   user: User | null;
   setUser: (user: User) => void;
-};
+}
 
 export const UserContext = createContext<UserContext>({
   user: null,

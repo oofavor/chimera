@@ -1,10 +1,11 @@
 import { styled } from '@nextui-org/react';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '../../hooks/useUser';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUser();
+  
   return user ? (
     <Wrapper>
       <Sidebar />
